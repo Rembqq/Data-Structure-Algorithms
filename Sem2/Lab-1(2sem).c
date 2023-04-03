@@ -28,64 +28,70 @@ float des_recurs_func(int i, float x, int n, float sum)
         }
     }
 }
-
-float comb_recurs_func(int n, float x)
+float comb_recurs_func(float x, int n, float sum)
 {
-    float sum = sqrt(1-x);
-    float fi = -1;
-    printf("fi = %f i = %d sum = %f\n", fi, n, sum);
-    if(n == 2)
-    {
-        fi = -x/2;
+    if (n == 1) {
+        // it could be just return ++sum, but in my opinion 
+        // this way is more readable
+        sum++;
+        return sum;
+    } 
+    else if (n == 2) {
+        sum += -x/2;
+        return comb_recurs_func(x, n-1, sum);
+    } 
+    else {
+        // as we recall n == 2 statement, it refers to n == 1 where we add
+        // +1 to sum, therefore I have to pass -1 instead of 0 in sum
+        float last_el = comb_recurs_func(x, n-1, -1) * x * (2*n-3)/(2*n);
+        sum += last_el;
+        return comb_recurs_func(x, n-1, sum);
     }
-    else    
-    {
-        fi = comb_recurs_func(n-1, x) * x * (2*n - 3) / (2 * n);
-        sum += fi;
-    }
-    printf("fi = %f i = %d sum = %f\n", fi, n, sum);  
-    return fi;
 }
 
-float ret_recurs_func(int n, float x)
+float ret_recurs_func(float x, int n, float sum)
 {
-    float sum = 0;
-    float fi = -1;
-    printf("fi = %f i = %d sum = %f\n", fi, n, sum);
-    
-    if(n == 2)
-    {
-        fi = -x/2;
+    if (n == 1) {
+        // it could be just return ++sum, but in my opinion 
+        // this way is more readable
+        sum++;
+        return sum;
+    } 
+    else if (n == 2) {
+        sum += -x/2;
+        return comb_recurs_func(x, n-1, sum);
+    } 
+    else {
+        // as we recall n == 2 statement, it refers to n == 1 where we add
+        // +1 to sum, therefore I have to pass -1 instead of 0 in sum
+        float last_el = comb_recurs_func(x, n-1, -1) * x * (2*n-3)/(2*n);
+        sum += last_el;
+        return comb_recurs_func(x, n-1, sum);
     }
-    else    
-    {
-        fi = ret_recurs_func(n-1, x) * x * (2*n - 3) / (2 * n);
-    }
-    sum = sqrt(1-x);
-    printf("fi = %f i = %d sum = %f\n", fi, n, sum);  
-    return fi;
 }
 
 int main()
 {
-    int n, index = 1;
+    int n, last_elem = 1;
     float x, sum = 0;
     printf("Enter x(-1 < x < 1): ");
     scanf("%f", &x);
     printf("\n");
     printf("Enter n(n > 2): ");
     scanf("%d", &n);
-    
+
     // Recursive Return
-    //printf("\nReturn\n");
-    //printf("%f",ret_recurs_func(n, x, 0));
+    printf("\nReturn\n");
+    // for (int i = 0; i < n; i++) {
+    //     ret_recurs_func(x, i, &sum);
+    // }
 
     // Descent
     printf("\nRecursive Descent\n");
-    printf("%f",des_recurs_func(index, x, n, sum));
+    printf("%f", des_recurs_func(0, x, n, sum));
 
     // // Combined
     // printf("\nCombined\n");
-    // printf("%f",comb_recurs_func(index, x, n, sum));
+    // printf("%f", comb_recurs_func(x, n, sum));
 
 }
