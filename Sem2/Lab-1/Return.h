@@ -1,4 +1,3 @@
-#include <stdio.h>
 
 double ret_recursive_sum(int n, double x) {
     if (n == 0) {
