@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 char ProgName[] = "Лабораторна робота 3";
@@ -10,6 +12,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpszCmdLine, int nCmdShow)
 {
     WNDCLASS w;
+
+
     w.lpszClassName = ProgName;
     w.hInstance = hInstance;
     w.lpfnWndProc = WndProc;
@@ -31,8 +35,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         WS_OVERLAPPEDWINDOW, //Стиль вікна - комплексний
         100, //положення верхнього кута вікна на екрані по х
         100, // положення верхнього кута вікна на екрані по y
-        460, //ширина вікна
-        240, //висота вікна
+        500, //ширина вікна
+        460, //висота вікна
         (HWND)NULL, // ідентифікатор породжуючого вікна
         (HMENU)NULL, //ідентифікатор меню (немає)
         (HINSTANCE)hInstance, //ідентифікатор екземпляра вікна
@@ -50,10 +54,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
     return(lpMsg.wParam);
 }
+
 void arrow(HDC hdc, float fi, int px, int py)
 {
-    // контекст
-    fi = 3.1416 * (180.0 - fi) / 180.0;
+
     int lx, ly, rx, ry;
     lx = px + 15 * cos(fi + 0.3);
     rx = px + 15 * cos(fi - 0.3);
@@ -62,6 +66,30 @@ void arrow(HDC hdc, float fi, int px, int py)
     MoveToEx(hdc, lx, ly, NULL);
     LineTo(hdc, px, py);
     LineTo(hdc, rx, ry);
+}
+
+
+float setFi(HDC hdc, int sx, int sy, int px, int py)
+{
+    //довжина прилеглого катета
+    float adjacent_leg = px - sx;
+
+    // відстань між точками(гіпотенуза)
+    float hypotenuse = sqrt((px - sx) * (px - sx) + (py - sy) * (py - sy));
+
+    //по формулі дізнаємось фі через acos()
+    float fi = acos(adjacent_leg / hypotenuse);
+
+    // коригування кутів
+    if (sy >= py)
+    {
+        fi = 3.1416 - fi;
+    }
+    else
+    {
+        fi = 3.1416 + fi;
+    }
+    return fi;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
@@ -84,21 +112,48 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
     switch (messg) {
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
-        char* nn[3] = { "1", "2", "3" };
-        int nx[3] = { 100,200,300 };
-        int ny[3] = { 100,100,100 };
+        char* nn[10] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", L"10"};
+        int nx[10] = { 125,145,200,275,330, 350, 330, 275, 200, 145};
+        int ny[10] = { 200,130,90 ,90 ,130, 200, 270, 310, 310, 270};
         int dx = 16, dy = 16, dtx = 5;
-        int i;
+
+        float ugu;
+        float fi, x_offset, y_offset;
+        srand(time(NULL));
+        bool adjacency_matrix[10][10];
+        for (int i = 0; i < 10; ++i)
+        {
+            for (int j = 0; j < 10; ++j)
+            {
+                ugu = (float)rand() / (float)RAND_MAX;
+                adjacency_matrix[i][j] = (((1.0 - 0 * 0.02 - 1 * 0.005 - 0.25) * (ugu)
+                     * 2) >= 1.0) ? true : false;
+                if (adjacency_matrix[i][j] && i != j)
+                {
+
+                    
+                    /*
+                    Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0] - 40, ny[0] - 40);
+                    arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);*/
+                }
+                MoveToEx(hdc, nx[i], ny[i], NULL);
+                LineTo(hdc, nx[j], ny[j]);
+                fi = setFi(hdc, nx[i], ny[i], nx[j], ny[j]);
+
+                arrow(hdc, fi, nx[j]-dtx, ny[j]-dy);
+            }
+        }
         HPEN BPen = CreatePen(PS_SOLID, 2, RGB(50, 0, 255));
         HPEN KPen = CreatePen(PS_SOLID, 1, RGB(20, 20, 5));
         SelectObject(hdc, KPen);
-        MoveToEx(hdc, nx[0], ny[0], NULL);
+
+       /* MoveToEx(hdc, nx[0], ny[0], NULL);
         LineTo(hdc, nx[1], ny[1]);
         arrow(hdc, 0, nx[1] - dx, ny[1]);
-        Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0], ny[0]);
-        arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);
+        Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0]-40, ny[0]-40);
+        arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);*/
         SelectObject(hdc, BPen);
-        for (i = 0; i <= 2; i++) {
+        for (int i = 0; i <= 9; i++) {
             Ellipse(hdc, nx[i] - dx, ny[i] - dy, nx[i] + dx, ny[i] + dy);
             TextOut(hdc, nx[i] - dtx, ny[i] - dy / 2, nn[i], 1);
         }
