@@ -1,0 +1,89 @@
+[33mcommit 9d8dc4cdecf226ef38d4905259a3ed13ef095f9e[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Thu May 18 11:29:32 2023 +0300
+
+    untrack files contained in the .gitignore file
+
+[33mcommit 24914d1cdbf3248c28296fb3924c3bd6d58cf58b[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Thu May 18 11:26:52 2023 +0300
+
+    s
+
+[33mcommit cbcc2e73b0b392c6e673b898ad1b6b030d8221ca[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Thu May 18 11:23:23 2023 +0300
+
+    giignore
+
+[33mcommit 43f3ff4bd14d9f9a10e71f4ba3b6eb18ecbfb21f[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Wed May 17 19:37:39 2023 +0300
+
+    break
+
+[33mcommit e8e3aff8dd9ddfaa23c8f619755897ddbb8e2cba[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Tue May 16 11:21:34 2023 +0300
+
+    deleting unnsecessary files
+
+[33mcommit 8614fb0dc5ffe4fdc4668ff2792c269479a7a1ab[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Tue May 16 10:50:57 2023 +0300
+
+    remove vscode folder
+
+[33mcommit 6873168efd1afa3604dcd1fbebb84ca71873dc52[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Mon May 15 23:02:07 2023 +0300
+
+    lab3 starter
+
+[33mcommit 1b674140d998e0d76ff6b6d6c38d6f067c80b603[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Wed Apr 26 16:17:35 2023 +0300
+
+    WinMain
+
+[33mcommit ed82b8c093a393932049ce17991d1a3d6286d28b[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Tue Apr 25 12:23:37 2023 +0300
+
+    completed doubly-linkeded-list
+
+[33mcommit acdcc4ec0f227137b12d91d67042b8a7f60059a9[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Mon Apr 17 11:56:29 2023 +0300
+
+    sel_sort
+
+[33mcommit 5bd5133e24556f0e43fea9d07b495ccc9d798489[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Sun Apr 9 17:28:01 2023 +0300
+
+    user_input_limitations & loop
+
+[33mcommit 43470d4e608d67df5dbf9070c19582579082f614[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Sun Apr 9 13:00:55 2023 +0300
+
+    all completed(badly)
+
+[33mcommit fcffe6b2af86550b3b8c165143696f0d881ddcaa[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Mon Apr 3 22:34:28 2023 +0300
+
+    comb_completed
+
+[33mcommit 45be4b67939b419715e58dbf7ba063e7705951b4[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Tue Mar 28 12:26:26 2023 +0300
+
+    Descent completed
+
+[33mcommit cc3167a3853ecb80ca5ff6def5d0cd9c3910d4ff[m
+Author: Rembqq <nikitavolkovskyi@gmail.com>
+Date:   Fri Mar 17 13:14:37 2023 +0200
+
+    folder allocating
