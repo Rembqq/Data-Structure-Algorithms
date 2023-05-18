@@ -55,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return(lpMsg.wParam);
 }
 
-void arrow(HDC hdc, float fi, int px, int py)
+void arrow(HDC hdc, float fi, int px, int py, int sy)
 {
 
     int lx, ly, rx, ry;
@@ -69,7 +69,7 @@ void arrow(HDC hdc, float fi, int px, int py)
 }
 
 
-float setFi(HDC hdc, int sx, int sy, int px, int py)
+float setFi(int sx, int sy, int px, int py)
 {
     //довжина прилеглого катета
     float adjacent_leg = px - sx;
@@ -90,6 +90,32 @@ float setFi(HDC hdc, int sx, int sy, int px, int py)
         fi = 3.1416 + fi;
     }
     return fi;
+}
+
+float calculate_Xoffset(float fi, int radius)
+{
+    /*float x;
+    if (fi >= 0 && fi <= 1,5708)
+    {
+        x = 
+    }
+    else if (fi >= 1,5708 && fi <= 3,14159)
+    {
+
+    }
+    else if (fi >= 3,14159 && fi <= 4,71239)
+    {
+
+    }
+    else
+    {
+
+    }*/
+    return -(cos(fi) * radius);
+}
+float calculate_Yoffset(float fi, int radius)
+{
+    return sin(fi) * radius;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
@@ -130,17 +156,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
                      * 2) >= 1.0) ? true : false;
                 if (adjacency_matrix[i][j] && i != j)
                 {
+                    MoveToEx(hdc, nx[i], ny[i], NULL);
+                    LineTo(hdc, nx[j], ny[j]);
+                    fi = setFi(nx[i], ny[i], nx[j], ny[j]);
+                    x_offset = calculate_Xoffset(fi, dx);
+                    y_offset = calculate_Yoffset(fi, dy);
 
-                    
+                    arrow(hdc, fi, nx[j] - x_offset, ny[j] + y_offset, ny[i]);
                     /*
                     Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0] - 40, ny[0] - 40);
                     arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);*/
                 }
-                MoveToEx(hdc, nx[i], ny[i], NULL);
-                LineTo(hdc, nx[j], ny[j]);
-                fi = setFi(hdc, nx[i], ny[i], nx[j], ny[j]);
-
-                arrow(hdc, fi, nx[j]-dtx, ny[j]-dy);
+                
             }
         }
         HPEN BPen = CreatePen(PS_SOLID, 2, RGB(50, 0, 255));
@@ -155,7 +182,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
         SelectObject(hdc, BPen);
         for (int i = 0; i <= 9; i++) {
             Ellipse(hdc, nx[i] - dx, ny[i] - dy, nx[i] + dx, ny[i] + dy);
-            TextOut(hdc, nx[i] - dtx, ny[i] - dy / 2, nn[i], 1);
+            TextOut(hdc, nx[i] - dtx, ny[i] - dy / 2, nn[i], 2);
         }
         EndPaint(hWnd, &ps);
         break;
