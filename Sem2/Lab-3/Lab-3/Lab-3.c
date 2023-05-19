@@ -55,9 +55,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return(lpMsg.wParam);
 }
 
-void arrow(HDC hdc, float fi, int px, int py, int sy)
+void rad_arrow(HDC hdc, float fi, int px, int py)
 {
 
+    int lx, ly, rx, ry;
+    lx = px + 15 * cos(fi + 0.3);
+    rx = px + 15 * cos(fi - 0.3);
+    ly = py + 15 * sin(fi + 0.3);
+    ry = py + 15 * sin(fi - 0.3);
+    MoveToEx(hdc, lx, ly, NULL);
+    LineTo(hdc, px, py);
+    LineTo(hdc, rx, ry);
+}
+
+void arrow(HDC hdc, float fi, int px, int py)
+{
+    fi = 3.1416 * (180.0 - fi) / 180.0;
     int lx, ly, rx, ry;
     lx = px + 15 * cos(fi + 0.3);
     rx = px + 15 * cos(fi - 0.3);
@@ -94,23 +107,6 @@ float setFi(int sx, int sy, int px, int py)
 
 float calculate_Xoffset(float fi, int radius)
 {
-    /*float x;
-    if (fi >= 0 && fi <= 1,5708)
-    {
-        x = 
-    }
-    else if (fi >= 1,5708 && fi <= 3,14159)
-    {
-
-    }
-    else if (fi >= 3,14159 && fi <= 4,71239)
-    {
-
-    }
-    else
-    {
-
-    }*/
     return -(cos(fi) * radius);
 }
 float calculate_Yoffset(float fi, int radius)
@@ -123,18 +119,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
 {
     HDC hdc; // контекст
     PAINTSTRUCT ps;
-    /*void arrow(float fi, int px, int py)
-    {
-        fi = 3.1416 * (180.0 - fi) / 180.0;
-        int lx, ly, rx, ry;
-        lx = px + 15 * cos(fi + 0.3);
-        rx = px + 15 * cos(fi - 0.3);
-        ly = py + 15 * sin(fi + 0.3);
-        ry = py + 15 * sin(fi - 0.3);
-        MoveToEx(hdc, lx, ly, NULL);
-        LineTo(hdc, px, py);
-        LineTo(hdc, rx, ry);
-    }*/
     switch (messg) {
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
@@ -151,34 +135,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
         {
             for (int j = 0; j < 10; ++j)
             {
-                ugu = (float)rand() / (float)RAND_MAX;
-                adjacency_matrix[i][j] = (((1.0 - 0 * 0.02 - 1 * 0.005 - 0.25) * (ugu)
-                     * 2) >= 1.0) ? true : false;
-                if (adjacency_matrix[i][j] && i != j)
+                adjacency_matrix[i][j] = (((1.0 - 0 * 0.02 - 1 * 0.005 - 0.25) * 
+                    (float)rand() / (float)RAND_MAX * 2) >= 1.0) ? true : false;
+                if (adjacency_matrix[i][j])
                 {
-                    MoveToEx(hdc, nx[i], ny[i], NULL);
-                    LineTo(hdc, nx[j], ny[j]);
-                    fi = setFi(nx[i], ny[i], nx[j], ny[j]);
-                    x_offset = calculate_Xoffset(fi, dx);
-                    y_offset = calculate_Yoffset(fi, dy);
-
-                    arrow(hdc, fi, nx[j] - x_offset, ny[j] + y_offset, ny[i]);
-                    /*
-                    Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0] - 40, ny[0] - 40);
-                    arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);*/
+                    if (i != j)
+                    {
+                        MoveToEx(hdc, nx[i], ny[i], NULL);
+                        LineTo(hdc, nx[j], ny[j]);
+                        fi = setFi(nx[i], ny[i], nx[j], ny[j]);
+                        x_offset = calculate_Xoffset(fi, dx);
+                        y_offset = calculate_Yoffset(fi, dy);
+                        rad_arrow(hdc, fi, nx[j] - x_offset, ny[j] + y_offset);
+                    }
+                    else
+                    {
+                        Arc(hdc, nx[i] - 40, ny[i] - 20, nx[i], ny[i] + 20, nx[i], ny[i], nx[i], ny[i]);
+                        arrow(hdc, -25.0, nx[j] - dx * 0.4, ny[j] - dy * 0.9);
+                    }
                 }
-                
+                /*if (i == j)
+                {
+                    Arc(hdc, nx[i]-40, ny[i]-20, nx[i], ny[i]+20, nx[i], ny[i], nx[i], ny[i]);
+                    arrow(hdc, -25.0 , nx[j] - dx * 0.4, ny[j] - dy * 0.9);
+                }*/
             }
         }
         HPEN BPen = CreatePen(PS_SOLID, 2, RGB(50, 0, 255));
         HPEN KPen = CreatePen(PS_SOLID, 1, RGB(20, 20, 5));
         SelectObject(hdc, KPen);
-
-       /* MoveToEx(hdc, nx[0], ny[0], NULL);
-        LineTo(hdc, nx[1], ny[1]);
-        arrow(hdc, 0, nx[1] - dx, ny[1]);
-        Arc(hdc, nx[0], ny[0] - 40, nx[2], ny[2] + 40, nx[2], ny[2], nx[0]-40, ny[0]-40);
-        arrow(hdc, -45.0, nx[2] - dx * 0.5, ny[2] - dy * 0.8);*/
         SelectObject(hdc, BPen);
         for (int i = 0; i <= 9; i++) {
             Ellipse(hdc, nx[i] - dx, ny[i] - dy, nx[i] + dx, ny[i] + dy);
@@ -193,18 +178,3 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg,
         return(DefWindowProc(hWnd, messg, wParam, lParam));
     }
 }
-
- //int WINAPI WinMain(HINSTANCE hInstance,
- //    HINSTANCE hPrevInstance,
- //    LPSTR lpCmdLine,
- //    int nShowCmd)
- //{
- //    // create a "Hello World" message box using MessageBox()
- //    MessageBox(NULL,
- //        L"Hello World!",
- //        L"Just another Hello World program!",
- //        MB_ICONEXCLAMATION | MB_OK);
-
- //    // return 0 to Windows
- //    return 0;
- //}
